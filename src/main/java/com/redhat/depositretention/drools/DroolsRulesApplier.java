@@ -54,7 +54,7 @@ public class DroolsRulesApplier {
         kieSession.fireAllRules();
 
         Collection<?> offers = kieSession.getObjects(new ClassObjectFilter(OFFER.class));
-        String offerId = "";
+       
         OFFER offer = null;
         for(Object offerObj:offers) {
             offer = (OFFER) offerObj;
