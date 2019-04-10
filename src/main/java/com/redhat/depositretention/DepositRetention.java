@@ -50,8 +50,9 @@ public class DepositRetention {
 		final KStream<String, String> inputTopic = builder.stream(INPUT_TOPIC);
 
 		KStream<String, String> outputData = inputTopic.map((x,y) -> new KeyValue<>(x,rulesApplier.processTransaction(x,y)));
-
-		outputData.to(OUTPUT_TOPIC, Produced.with(Serdes.String(), Serdes.String()));
+		//Branch all not null events
+		KStream<String, String>[] analyzedEvents = outputData.branch((x, y) ->  y!=null);
+		analyzedEvents[0].to(OUTPUT_TOPIC, Produced.with(Serdes.String(), Serdes.String()));
 
 		return outputData;
 	}
