@@ -26,7 +26,7 @@ import java.util.Map;
 @EnableKafkaStreams
 public class DepositRetention {
 
-	public static final String BROKER_URL = "localhost:9092";
+	public static final String BROKER_URL = "my-cluster-kafka-brokers:9092";
 	public static final String INPUT_TOPIC = "event-input-stream";
 	public static final String OUTPUT_TOPIC = "offer-output-stream";
 
