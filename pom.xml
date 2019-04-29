@@ -59,8 +59,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.myspace</groupId>
-			<artifactId>Deposit_Retention</artifactId>
+			<groupId>com.redhat</groupId>
+			<artifactId>Personalization_Rules</artifactId>
 			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>

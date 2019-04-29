@@ -8,23 +8,11 @@ import org.kie.dmn.api.core.DMNRuntime;
 
 public class DroolsSessionFactory {
 
-    protected static KieSession createDroolsSession(String sessionName) {
+    protected static KieSession createDroolsSession() {
         KieServices kieServices = KieServices.Factory.get();
-        ReleaseId releaseId = kieServices.newReleaseId("com.myspace","Deposit_Retention","1.0.0");
-        KieContainer kieContainer = kieServices.newKieContainer(releaseId);
+        KieContainer kieContainer = kieServices.newKieClasspathContainer();
         KieSession kieSession =  kieContainer.newKieSession();
         return kieSession;
     }
-
-    protected static DMNRuntime createDMNRuntime(String sessionName) {
-        KieServices kieServices = KieServices.Factory.get();
-        ReleaseId releaseId = kieServices.newReleaseId("com.myspace","Deposit_Retention","1.0.0");
-        KieContainer kieContainer = kieServices.newKieContainer(releaseId);
-        DMNRuntime dmnRuntime = kieContainer.newKieSession().getKieRuntime(DMNRuntime.class);
-        return dmnRuntime;
-    }
-
-
-
 
 }
