@@ -1,13 +1,13 @@
-package com.redhat.depositretention;
+package com.redhat.eventAnalysis;
 
-import com.google.gson.Gson;
-import com.redhat.depositretention.drools.DroolsRulesApplier;
+import com.redhat.eventAnalysis.drools.EventProcessor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.TimeWindows;
+import org.apache.kafka.streams.kstream.Windowed;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,7 +40,7 @@ public class EventAnalysis {
 	public StreamsConfig kStreamsConfigs(KafkaProperties kafkaProperties) {
 		Map<String, Object> props = new HashMap<>();
 		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, brokerUrl);
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "testStreams");
+		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "testStreams2");
 		props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
@@ -50,16 +50,24 @@ public class EventAnalysis {
 	@Bean
 	public KStream<String, String> kStream(StreamsBuilder builder) {
 
-		DroolsRulesApplier rulesApplier = new DroolsRulesApplier();
+		EventProcessor rulesApplier = new EventProcessor();
 		final KStream<String, String> inputTopic = builder.stream(inpTopic);
 
+		//Watch for ATM Withdrawal events within a time window
+		KStream<Windowed<String>, Long>[] sream = inputTopic.map((x, y) -> new KeyValue<>(x,rulesApplier.processEvent(x,y)))
+				.filter((k,v) -> null != v)
+				.groupByKey()
+				.windowedBy(TimeWindows.of(14000L))
+				.count()
+				.filter((k,v) -> v > 2)
+				.toStream()
+				.branch((k,v) -> null != v);
+		KStream<String, String> stream = sream[0]
+				.map((k,v)-> new KeyValue<>(k.key(),String.valueOf(v)));
 
-		KStream<String, String> outputData = inputTopic.map((x,y) -> new KeyValue<>(x,rulesApplier.processEvent(x,y)));
-		//Branch all not null events
-		KStream<String, String>[] analyzedEvents = outputData.branch((x, y) -> null != y);
-		analyzedEvents[0].to(outTopic, Produced.with(Serdes.String(), Serdes.String()));
+		stream.to(outTopic);
 
-		return outputData;
+		return stream;
 	}
 
 
