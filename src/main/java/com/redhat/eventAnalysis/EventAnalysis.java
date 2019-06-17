@@ -1,6 +1,6 @@
 package com.redhat.eventAnalysis;
 
-import com.redhat.eventAnalysis.drools.EventProcessor;
+import com.redhat.eventAnalysis.processor.EventProcessor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;

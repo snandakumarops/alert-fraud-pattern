@@ -1,4 +1,4 @@
-package com.redhat.eventAnalysis.drools;
+package com.redhat.eventAnalysis.processor;
 
 import com.google.gson.Gson;
 import org.apache.kafka.streams.kstream.Windowed;
