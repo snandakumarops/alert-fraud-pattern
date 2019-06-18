@@ -32,7 +32,9 @@ public class EventProcessor {
 
         if(null != eventAnalysis) {
             AbstractMap.SimpleEntry<String,String > keyValue = new AbstractMap.SimpleEntry(key, eventAnalysis);
+            System.out.println("Gson map"+new Gson().toJson(keyValue));
             return new Gson().toJson(keyValue);
+
         }
         return null;
     }
