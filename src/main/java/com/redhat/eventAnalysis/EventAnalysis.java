@@ -40,7 +40,7 @@ public class EventAnalysis {
 	public StreamsConfig kStreamsConfigs(KafkaProperties kafkaProperties) {
 		Map<String, Object> props = new HashMap<>();
 		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, brokerUrl);
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "testStreams2");
+		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "testStreams");
 		props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
