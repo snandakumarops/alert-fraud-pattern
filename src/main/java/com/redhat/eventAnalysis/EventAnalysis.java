@@ -57,7 +57,7 @@ public class EventAnalysis {
 		KStream<Windowed<String>, Long>[] sream = inputTopic.map((x, y) -> new KeyValue<>(x,rulesApplier.processEvent(x,y)))
 				.filter((k,v) -> null != v)
 				.groupByKey()
-				.windowedBy(TimeWindows.of(140L))
+				.windowedBy(TimeWindows.of(60000L))
 				.count()
 				.filter((k,v) -> v > 2)
 				.toStream()
