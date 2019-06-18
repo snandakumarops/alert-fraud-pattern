@@ -62,6 +62,7 @@ public class EventAnalysis {
 				.filter((k,v) -> v > 2)
 				.toStream()
 				.branch((k,v) -> null != v);
+		sream[0].foreach((k,v) -> System.out.println(k.key()));
 		KStream<String, String> stream = sream[0]
 				.map((k,v)-> new KeyValue<>(k.key(),String.valueOf(v)));
 
